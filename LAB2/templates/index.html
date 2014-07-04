@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+
+<!-- <img src="{{ MEDIA_URL }}photos/challenge.jpg" alt="" /> -->
+{% block links %}
+{% if user.is_authenticated %}
+    <form class="form_floated" action='/users/view_profile/' method='get'> 
+        <button type ='submit' class='btn'>View profile</button>
+    </form>
+    
+    <form class="form_floated" action='/photos/list_images/' method='get'> 
+        <button type ='submit' class='btn'>View pictures</button>
+    </form>
+
+
+    <form class="form_floated" action='/photos/upload_pic/' method='get'> 
+        <button type ='submit' class='btn'>Upload a picture</button>
+    </form>
+
+{% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <p class="lead">
+        {% if user.customuser.notification.all %}
+            <a href="/users/notifications/{{ user.customuser.id }}/">You have new friend requests</a> <br>
+        {% else %}
+            No new friend requests.
+        {% endif %}
+        </p>
+    {% endif %}
+{% endblock %}

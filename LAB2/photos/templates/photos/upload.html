@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form action="/photos/upload_pic/" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for field in form.visible_fields %}
+        <div>
+            <div class="control-group">
+                <label class="control-label">{{ field.label_tag }}</label> 
+                <div class="controls">
+                    {{ field }}
+                </div>
+                {{ field.errors }}
+            </div>
+        </div>
+    {% endfor %}
+    <button type="submit" class='btn btn-primary'>Upload</button>
+</form>
+
+{% endblock %}

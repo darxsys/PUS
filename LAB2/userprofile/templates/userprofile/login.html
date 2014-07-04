@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {{ form.non_field_errors }}
+    <div id="login">
+        <form class="form-horizontal" name="LoginForm" action="/users/login/" method="POST">
+            {% csrf_token %}
+            <div class="control-group">
+                <label class="control-label" for="username">Username</label>
+                <div class="controls">
+                    <input type="text" id="username" name="username"  placeholder="Username">
+                </div>
+                {{ form.username.errors }}
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="password">Password</label>
+                <div class="controls">
+                    <input type="password" name="password" id="password" placeholder="Password">
+                </div>
+                {{ form.password.errors }}
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div>
+    {% if list %}
+        {% for friend in list %}
+            <strong> {{ friend.user.username }} </strong>
+            <form action="/photos/tag/{{ friend.id }}/{{ photo.id }}/" method="POST" /> {% csrf_token %}
+                <button type="submit" name="tag" class='btn btn-primary'>Tag</button>
+            </form> 
+        {% endfor %}
+    {% else %}
+        <strong> You dont have any friends. </strong>
+    {% endif %}
+    </div>
+
+{% endblock %}

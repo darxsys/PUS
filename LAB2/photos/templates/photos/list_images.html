@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if images %}
+        {% if user.username == user_id.user.username %}
+            <strong> Your photos: </strong> <br>
+        {% else %}
+            <strong> User {{user_id.user.username}} photos: </strong> <br>
+        {% endif %}
+
+        <ul>
+        {% for image in images %}
+            <li> Photo: <a href="/photos/photo/{{ image.id }}/"> {{ image.name }}</a> </li> <br>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <em>No images to show.</em>
+    {% endif %}
+{% endblock %}

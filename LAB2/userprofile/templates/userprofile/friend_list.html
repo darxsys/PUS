@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div>
+    {% if list %}
+        <strong>Friends:</strong> <br>
+        <ul class='list-group'>
+            {% for friend in list %}
+                <li class='list-group-item'> User: <a href="/users/user/{{ friend.id }}/"> {{ friend.user.username }}</a> <br></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        {% if user_id.user.username == user.username %}
+            <strong> You have no friends :( </strong>
+        {% else %}
+            <strong> User {{ user_id.user.username }} has no friends. </strong>
+        {% endif %}
+    {% endif %}
+    </div>
+{% endblock %}

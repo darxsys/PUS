@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div>
+    <strong>Username:</strong> {{user_id.user.username}} <br>
+    <strong>First name:</strong> {{user_id.user.first_name}} <br>
+    <strong>Last name:</strong> {{user_id.user.last_name}} <br></br>
+
+    {% if user.username != user_id.user.username and friend == False %}
+        <form action="/users/user_add/{{ user_id.id }}/" method="post">{% csrf_token %}
+            <button type="submit" class='btn btn-primary btn-small' >Add to friends</button>
+        </form>
+    {% endif %}
+
+    {% if pics %}
+
+        {% if user.username == user_id.user.username %}
+            <strong> Your photos: </strong> <br>
+        {% else %}
+            <strong> {{ user_id.user.username }} has following photos available: <strong> <br>
+        {% endif %}
+        <ul>
+            {% for pic in pics %}
+                <li> <strong>Photo: </strong> <a href="/photos/photo/{{ pic.id }}/">{{ pic.name }}</a></li> <br>
+            {% endfor %}
+        </ul>
+    {% else %}
+        {% if user.username == user_id.user.username %}
+            <strong> You have no pictures uploaded. </strong> <br>
+        {% else %}
+            <strong> User has no pictures available. </strong>
+        {% endif %}
+    {% endif %}
+
+    <!-- friends -->
+    {% if user.username == user_id.user.username %}
+        <form action="/users/friend_list/{{ user.customuser.id }}/" method="GET">
+            {% csrf_token %}
+            <button type="submit" class='btn btn-primary btn-small' >View friends</button>
+        </form>
+        <!-- <a href="/users/friend_list/{{ user.customuser.id }}/"> View friends</a> -->
+    {% else %}
+        <form action="/users/friend_list/{{ user_id.id }}/" method="GET">
+            {% csrf_token %}
+            <button type="submit" class='btn btn-primary btn-small' >View friends</button>
+        </form>
+        <!-- <a href="/users/friend_list/{{ user_id.id }}/"> View friends</a> -->
+    {% endif %}
+    </div>
+{% endblock %}

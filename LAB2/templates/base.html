@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+    <head>
+        <title>PUS - Lab2</title>
+        <link href="{% static "bootstrap/css/bootstrap.css" %}" rel="stylesheet" media="screen">
+        <!-- <link href="{{ STATIC_URL }}boostrap/css/bootstrap.css" rel="stylesheet" media="screen"> -->
+        <style>
+            .form_floated {
+                float: left;
+                /*width: 100px;*/
+            }
+
+            .clear {
+                float: left;
+                clear: both;
+                width: 100%;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class='clear'>
+            {% if user.is_authenticated %}
+                <p class='text-success'>Welcome, {{ user.username }}. Thanks for logging in.</p>
+            {% else %}
+                <p class='text-warning'>Welcome, stranger. Please log in or register.</p>
+            {% endif %}
+
+            <div>
+                <form class="form_floated" action='/' method='get'> 
+                    <button type ='submit' class='btn'>Home</button>
+                </form>
+                {% if not user.is_authenticated %}
+                    <form class="form_floated" action='/admin/' method='get'> 
+                        <button type ='submit' class='btn'>Admin</button>
+                    </form>
+                {% endif %}
+
+                {% if not user.is_authenticated %}
+                    <form class="form_floated" action='/users/register/' method='get'> 
+                        <button type ='submit' class="btn btn-primary">Register</button>
+                    </form>
+                    <form class="form_floated" action='/users/login/' method='get'> 
+                        <button type ='submit' class="btn btn-primary">Login</button>
+                    </form>
+                {% endif %}
+
+                {% block search %}
+                    {% if user.is_authenticated %}
+                        <form class="form_floated" action='/users/user_search/' method='get'> 
+                            <button type ='submit' class = 'btn'>Search</button>
+                        </form>
+                    {% endif %}
+                {% endblock %}
+
+                    {% block links %}{% endblock %}
+                    {% if user.is_authenticated %}        
+                        <form class="form_floated" action='/users/logout/' method='get'> 
+                            <button type ='submit' class='btn btn-danger'>Log out</button>
+                        </form>
+                    {% endif %}                        
+            </div>
+        </div>
+        <!-- <br></br> -->
+    {% block content %}{% endblock %}
+    </body>
+</html>

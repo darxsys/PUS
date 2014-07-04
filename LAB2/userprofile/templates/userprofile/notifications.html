@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if list %}
+        {% for item in list %}
+            Friend request from: {{ item.source.user.username }} <br>
+            <form action="/users/accept/{{ item.id }}/" method="POST" /> {% csrf_token %}
+              <input type="submit" value="Accept" name="accept" />
+              <input type="submit" value="Reject" name="reject">
+            </form>            
+        {% endfor %}
+    {% else %}
+        No friend requests.
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<body>
+    {% if list %}
+    <p> <strong> Search results: </strong> </p>
+    <ul class="list-group">
+        {% for user in list %}
+            <li class="list-group-item"><a href="/users/user/{{ user.id }}/">User: {{ user.user.username }}</a></li>
+        {% endfor %}
+    </ul>
+
+    {% else %}
+        <p> <strong> No results. </strong> </p>
+    {% endif %}
+</body>
+{% endblock %}

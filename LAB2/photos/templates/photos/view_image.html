@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div>
+        <img src="{{ MEDIA_URL }}{{ photo.photo }}" class="img-rounded" alt="" /> <br></br>
+        <strong> Photo name: </strong>
+        {{ photo.name }} <br>
+        Public:
+        {% if photo.public %}
+            <strong> Yes </strong> <br>
+            {% if photo.owner == user.customuser %}
+                <form action="/photos/change_priv/{{ photo.id }}/" method="POST" /> 
+                {% csrf_token %}
+                    <button type="submit" name="priv" class="btn btn-link" >Change to private</button> 
+                </form> 
+            {% endif %}           
+        {% else %}
+            <strong> No </strong> <br>
+            {% if photo.owner == user.customuser %}
+                <form action="/photos/change_priv/{{ photo.id }}/" method="POST" /> 
+                {% csrf_token %}
+                    <button type="submit" name="publ" class="btn btn-link" >Change to public</button> 
+                </form>
+            {% endif %}             
+        {% endif %}
+
+        {% if likes %}
+            People that like the photo:
+            {% for like in likes %}
+                {% if like.user == user %}
+                    <a href="/users/user/{{ like.user.customuser.id }}/">You</a>,
+                {% else %}
+                    <a href="/users/user/{{ like.user.customuser.id }}/">{{ like.user.username }}</a>,
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            No one likes this picture :(.
+        {% endif %}
+
+        <!-- image liking -->
+        {% if not liked %}
+            <form action="/photos/like/{{ photo.id }}/" method="GET" /> {% csrf_token %}
+                <button type="submit" class="btn btn-link" > Like </button> 
+            </form>   
+            <!-- <a href="/photos/like/{{ photo.id }}/"> Like </a> <br> -->
+        {% else %}
+            <form action="/photos/unlike/{{ photo.id }}/" method="GET" /> {% csrf_token %}
+                <button type="submit" class="btn btn-link" > Unlike </button> 
+            </form>     
+            <!-- <a href="/photos/unlike/{{ photo.id }}/"> Unlike </a> <br> -->
+        {% endif %}
+
+        <!-- tags -->
+        {% if tags %}
+            People tagged in this photo:
+            {% for tag in tags %}
+                {% if tag.user == user %}
+                    <a href="/users/user/{{ tag.id }}/">You</a>
+                {% else %}
+                    <a href="/users/user/{{ tag.id }}/">{{ tag.user.username }}</a>
+                {% endif %}            
+                <!-- {{ tag.user.username }}  -->
+            {% endfor %}
+
+            {% if user.customuser in tags %}
+                <form action="/photos/tag/{{ user.customuser.id }}/{{ photo.id }}/" method="POST" /> {% csrf_token %}
+                    <button type="submit" name="remove" class='btn btn-error btn-sm'>Remove tag</button>
+                </form>         
+            {% endif %}
+        {% else %}
+            No one is tagged in this picture. 
+        {% endif %}
+
+        <!-- tagging friends -->
+        <form action="/photos/tag/{{ user.customuser.id }}/{{ photo.id }}/" method="POST" /> {% csrf_token %}
+            <button type="submit" name="list" class='btn btn-primary btn-small'>Tag a friend</button>
+        </form>    
+        <!-- comments -->
+        {% if comments %}
+            {% for comment in comments %}
+                {{ comment.user.user.username }} says: <br>
+                {{ comment.text }} <br>
+                {% if comment.user.user == user %}
+                <form action="/photos/uncomment/{{ photo.id }}/{{ comment.id }}" method="GET">
+                    <button type="submit" class="btn btn-primary btn-small"> Delete comment </button> 
+                </form>
+
+                    <!-- <a href="/photos/uncomment/{{ photo.id }}/{{ comment.id }}/"> Delete comment </a> <br> -->
+                {% endif %}
+
+            {% endfor %}
+
+        {% else %}
+            Image has no comments yet.
+        {% endif %}
+     
+        <!-- add comment  -->
+        <form id="comment_pic" method="post" action="/photos/comment/{{ photo.id }}/"> {% csrf_token %}
+                <div>
+                    <textarea id="text" rows="3" class="" name="comm" maxlength="200" placeholder="Type a comment"></textarea>
+                </div>
+                <!-- <div class="form-actions"> -->
+                <button type="submit" class='btn btn-primary btn-small'>Add comment</button>
+                <!-- </div> -->
+        </form>    
+    </div>
+{% endblock %}
